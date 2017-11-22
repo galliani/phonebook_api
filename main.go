@@ -1,6 +1,9 @@
 package main
 
 import (
+    "database/sql"
+    _ "github.com/mattn/go-sqlite3"
+
     "encoding/json"
     "log"
     "net/http"
@@ -10,6 +13,17 @@ import (
 )
 
 var people []models.Person
+
+var database *sql.DB
+var err error
+
+func init() {
+    _, err := sql.Open("sqlite3", "phonebook.db")
+    if err != nil {
+        fmt.Println(err)
+        log.Fatal(err)
+    }
+}
 
 // our main function
 func main() {
