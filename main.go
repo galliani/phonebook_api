@@ -78,8 +78,11 @@ func DeletePerson(w http.ResponseWriter, r *http.Request) {
             people = append(people[:index], people[index+1:]...)
             break
         }
-        
+
+        // Make it return 204 status
+        w.WriteHeader(http.StatusNoContent)
+
         json.NewEncoder(w).Encode(people)
-    }
+    }    
 }
 

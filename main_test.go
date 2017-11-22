@@ -13,7 +13,8 @@ func Router() *mux.Router {
     
     router.HandleFunc("/people", GetPeople).Methods("GET")
     router.HandleFunc("/people/{id}", GetPerson).Methods("GET")
-    router.HandleFunc("/people/{id}", CreatePerson).Methods("POST")    
+    router.HandleFunc("/people/{id}", CreatePerson).Methods("POST")
+    router.HandleFunc("/people/{id}", DeletePerson).Methods("DELETE")
 
     return router
 }
@@ -51,6 +52,17 @@ func TestCreatePerson(t *testing.T) {
     Router().ServeHTTP(response, request)
 
     if response.Code != 201 {
+        t.Errorf("Expected status code: %d", response.Code) //Uh-oh this means our test failed
+    }
+}
+
+func TestDeletePerson(t *testing.T) {
+    request, _ := http.NewRequest("DELETE", "/people/1", nil)
+    response := httptest.NewRecorder()
+    
+    Router().ServeHTTP(response, request)
+
+    if response.Code != 204 {
         t.Errorf("Expected status code: %d", response.Code) //Uh-oh this means our test failed
     }
 }
