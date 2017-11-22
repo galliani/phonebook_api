@@ -64,6 +64,9 @@ func CreatePerson(w http.ResponseWriter, r *http.Request) {
     person.ID = params["id"]
     people = append(people, person)
 
+    // Make it return 201 status
+    w.WriteHeader(http.StatusCreated)
+
     json.NewEncoder(w).Encode(people)
 }
 

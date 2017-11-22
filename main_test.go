@@ -3,6 +3,7 @@ import (
     "net/http"
     "net/http/httptest"
     "testing"
+    "strings"
     "github.com/gorilla/mux"    
 )
 
@@ -12,7 +13,8 @@ func Router() *mux.Router {
     
     router.HandleFunc("/people", GetPeople).Methods("GET")
     router.HandleFunc("/people/{id}", GetPerson).Methods("GET")
-    
+    router.HandleFunc("/people/{id}", CreatePerson).Methods("POST")    
+
     return router
 }
 
@@ -34,6 +36,21 @@ func TestGetPerson(t *testing.T) {
     Router().ServeHTTP(response, request)
 
     if response.Code != 200 {
+        t.Errorf("Expected status code: %d", response.Code) //Uh-oh this means our test failed
+    }
+}
+
+func TestCreatePerson(t *testing.T) {
+    inputJson := `{"Firstname": "dennis", "Lastname": "The menace"}`
+    //Convert string to reader because NewRequest expect reader type as the last argument
+    reader := strings.NewReader(inputJson)
+
+    request, _ := http.NewRequest("POST", "/people/100", reader)
+    response := httptest.NewRecorder()
+    
+    Router().ServeHTTP(response, request)
+
+    if response.Code != 201 {
         t.Errorf("Expected status code: %d", response.Code) //Uh-oh this means our test failed
     }
 }
