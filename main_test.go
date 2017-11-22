@@ -25,9 +25,7 @@ func TestGetPeople(t *testing.T) {
     
     Router().ServeHTTP(response, request)
 
-    if response.Code != 200 {
-        t.Errorf("Expected status code: %d", response.Code) //Uh-oh this means our test failed
-    }
+    assertResponseCode(200, response.Code, t)
 }
 
 func TestGetPerson(t *testing.T) {
@@ -36,9 +34,7 @@ func TestGetPerson(t *testing.T) {
     
     Router().ServeHTTP(response, request)
 
-    if response.Code != 200 {
-        t.Errorf("Expected status code: %d", response.Code) //Uh-oh this means our test failed
-    }
+    assertResponseCode(200, response.Code, t)
 }
 
 func TestCreatePerson(t *testing.T) {
@@ -51,9 +47,7 @@ func TestCreatePerson(t *testing.T) {
     
     Router().ServeHTTP(response, request)
 
-    if response.Code != 201 {
-        t.Errorf("Expected status code: %d", response.Code) //Uh-oh this means our test failed
-    }
+    assertResponseCode(201, response.Code, t)
 }
 
 func TestDeletePerson(t *testing.T) {
@@ -62,7 +56,11 @@ func TestDeletePerson(t *testing.T) {
     
     Router().ServeHTTP(response, request)
 
-    if response.Code != 204 {
-        t.Errorf("Expected status code: %d", response.Code) //Uh-oh this means our test failed
+    assertResponseCode(204, response.Code, t)
+}
+
+func assertResponseCode(expectedCode int, responseCode int, t *testing.T) {
+    if responseCode != expectedCode {
+        t.Errorf("Expected status code: %d", responseCode) //Uh-oh this means our test failed
     }
 }
